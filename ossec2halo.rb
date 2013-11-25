@@ -1,12 +1,10 @@
 #!/usr/bin/env ruby
-
+$LOAD_PATH << File.expand_path('./lib')
 require 'nokogiri'
 require 'haloformat'
-
-
+require 'directories'
 
 =begin
-	
 Sample of OSSEC file
 
 <group name="apache,">
@@ -21,10 +19,6 @@ Sample of OSSEC file
     <description>Apache error messages grouped.</description>
   </rule>
 </group>
-
-=end
-
-=begin
 	
 Sample of actual Halo rule
 
@@ -49,49 +43,32 @@ Sample of actual Halo rule
     ]
   }
 }
-	
-=end
-
-=begin
-
-Sample of format using class
-
-HaloFormat.header
-	HaloFormat.name + rb_file_master + HaloFormat.commaend
-	HaloFormat.description + ////check_name//// + HaloFormat.commaend
-	HaloFormat.platform + "Linux" + HaloFormat.commaend #or Windows
-	HaloFormat.template
-	HaloFormat.retired
-	HaloFormat.system
-	HaloFormat.rules
-		HaloFormat.leftcurl
-			HaloFormat.name + ////check_desc//// + HaloFormat.commaend
-			HaloFormat.searchpattern + ////check_match//// + HaloFormat.commaend
-			HaloFormat.filepath + ////need to discover dir/file//// + HaloFormat.commaend
-			HaloFormat.kind + "Text" + HaloFormat.commaend
-			HaloFormat.active
-			HaloFormat.alert
-			HaloFormat.critical
-		HaloFormat.rightcurl+HaloFormat.comma
-
-		### count number of rules and finish the last one with
-		HaloFormat.rightcurl
-		###
-HaloFormat.footer	
 =end
 
 inputter = []
 commands = []
-ossec_dir = "./data/"
-output_dir = "./converted/"
 
 ARGV.each {|arg| commands << arg}
-rb_file_master = Dir.glob(ossec_dir+"*.xml")
+#rb_file_master = Dir.glob(Directories.ossec_dir+"*.xml")
+rb_file_master = Directories.ossec_dir+"apache_rules.xml"
+f = File.open(rb_file_master)
+doc = Nokogiri::XML(f)
+root = doc.root
+puts root["name"]
+items = root.xpath("rule")
 
-rb_file_master.each do |rb_file|
-	xml = Nokogiri::XML.parse(open rb_file)
-      xml.css('group rule').each do |host|
+puts items[2]["id"]
+puts items[2]["level"]
+puts items[2].at_xpath("match")
+puts items[2].at_xpath("description")
+f.close
+
+#rb_file_master.each do |rb_file|
+#	xml = Nokogiri::XML.parse(open rb_file)
+=begin
+      xml.css('group').each do |host|
         begin
+          rule_id = host.css('id')
           check_decoded_as = host.css('decoded_as')
           check_if_sid = host.css('if_sid')
           check_regex = host.css('regex')
@@ -99,8 +76,9 @@ rb_file_master.each do |rb_file|
           check_desc = host.css('description')
           check_match = host.css('match')
 
-          inputter << [check_decoded_as.to_s,
-		       		   check_if_sid.to_s,
+          inputter << [rule_id.to_s,
+               check_decoded_as.to_s,
+		       		 check_if_sid.to_s,
 		  			   check_regex.to_s,
 		  			   check_name.to_s,
 		  			   check_desc.to_s,
@@ -110,21 +88,24 @@ rb_file_master.each do |rb_file|
         next
         end
       end
+
   end
 
 match_ary = []
 if ARGV[0] == 'convert'
 	inputter.each do |matchers| 
-	unless matchers[5].empty?
-			puts matchers[5]+"|"+matchers[4]
+	   unless matchers[5].empty?
+	     puts matchers[0]+","+matchers[1]+","+matchers[2]+","+matchers[3]+","+matchers[4]+","+matchers[5]+","+matchers[6]
+      #puts matchers[5]+"|"+matchers[4]
 	end
 end
+puts Haloformat.full_rule
 
 elsif ARGV[0] == 'list'
 	puts "[+] List of OSSEC XML files..."
 	rb_file_master.each do |filename|
-		puts "[>>>] "+filename.gsub(/#{ossec_dir}/, '')
+		puts "[>>>] "+filename.gsub(/#{Directories.ossec_dir}/, '')
 	end
 else puts Messages.usage
 end
-end
+=end

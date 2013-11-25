@@ -1,4 +1,4 @@
-class HaloFormat
+class Haloformat
 	class << self
 		def header
 			"{\"iea_policy\": {"
@@ -91,12 +91,13 @@ class HaloFormat
 
 	    def rule_construct_start
 	    	header+
-	    	name+"[30108] User authentication failed"+commaend+
-	    	description+"User authentication failed."+commaend+
+	    	name+"Apache"+commaend+
+	    	description+
+	    	"Official Apache rules for OSSEC. Copyright (C) 2009 Trend Micro Inc. - All rights reserved. This program is a free software; you can redistribute it and/or modify it under the terms of the GNU General Public License (version 2) as published by the FSF - Free Software Foundation. License details: http://www.ossec.net/en/licensing.html Contributed by: Ahmet Ozturk"+commaend+
 	    	platform+"linux"+commaend+
-	    	template+"false"+commaend+
-	    	retired+"false"+commaend+
-	    	system+"false"+commaend
+	    	template+
+	    	retired+
+	    	system
 	    end
 
 	    def check_construct
@@ -113,6 +114,10 @@ class HaloFormat
 
 	    def rule_construct_end
 	    	footer
+	    end
+
+	    def full_rule
+	    	rule_construct_start+check_construct+rule_construct_end
 	    end
 	end
 end

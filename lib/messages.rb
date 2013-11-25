@@ -3,6 +3,7 @@ class Messages
 		def usage
 	   		"[-] Usage: ./ossec2halo.rb <list|convert>"
 	  	end
+	  	
 	  	def err
 	  		"[-] Error..."
 	  	end
