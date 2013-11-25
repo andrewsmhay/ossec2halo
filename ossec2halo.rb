@@ -3,6 +3,7 @@ $LOAD_PATH << File.expand_path('./lib')
 require 'nokogiri'
 require 'haloformat'
 require 'directories'
+require 'awesome_print'
 
 =begin
 Sample of OSSEC file
@@ -47,22 +48,66 @@ Sample of actual Halo rule
 
 inputter = []
 commands = []
+i = 0
+match_ary = []
 
 ARGV.each {|arg| commands << arg}
-#rb_file_master = Dir.glob(Directories.ossec_dir+"*.xml")
-rb_file_master = Directories.ossec_dir+"apache_rules.xml"
-f = File.open(rb_file_master)
-doc = Nokogiri::XML(f)
-root = doc.root
-puts root["name"]
-items = root.xpath("rule")
+rb_file_master = Dir.glob(Directories.ossec_dir+"*.xml")
+#rb_file_master = Directories.ossec_dir+"*.xml"
+rb_file_master.each do |rb_file|
+  f = File.open(rb_file)
+  doc = Nokogiri::XML(f)
+  root = doc.root
+  puts root["name"]
+  items = root.xpath("rule")
 
-puts items[11]["id"]
-puts items[11]["level"]
-puts items[11].at_xpath("match").inner_text
-puts items[11].at_xpath("description").inner_text
-f.close
+  #items[11].xpath("match").each{|e| ap e.inner_text}
 
+  until i == items.count
+    if items[i].at_xpath("decoded_as") == nil || items[i]["frequency"] == nil || items[i].at_xpath("same_source_ip") == nil
+      rule_id = items[i]["id"]
+      level_id = items[i]["level"]
+      if items[i].at_xpath("match") != nil
+        check_match = items[i].at_xpath("match").inner_text
+      elsif items[i].at_xpath("regex") != nil
+        check_regex = items[i].at_xpath("regex").inner_text
+      else
+        check_match = nil
+        check_regex = nil
+      end
+      check_desc = items[i].at_xpath("description").inner_text
+      if items[i].at_xpath("info") != nil
+        check_info = items[i].at_xpath("info").inner_text
+      else check_info = nil
+      end
+
+=begin
+      puts items[i]["id"]
+      puts items[i]["level"]
+      if items[i].at_xpath("match") != nil
+        puts items[i].at_xpath("match").inner_text
+        #items[i].xpath("match").each{|e| match_ary << e.inner_text} <-- this prints each <match>
+      elsif items[i].at_xpath("regex") != nil
+        puts items[i].at_xpath("regex").inner_text
+      end
+      puts items[i].at_xpath("description").inner_text
+      if items[i].at_xpath("info") != nil
+        puts items[i].at_xpath("info").inner_text
+      end
+=end
+      
+      inputter << [rule_id,
+                  level_id,
+                  check_match,
+                  check_regex,
+                  check_desc,
+                  check_info]
+    end
+    i += 1
+  end
+  f.close
+  ap inputter
+end
 #rb_file_master.each do |rb_file|
 #	xml = Nokogiri::XML.parse(open rb_file)
 =begin
@@ -91,7 +136,7 @@ f.close
 
   end
 
-match_ary = []
+
 if ARGV[0] == 'convert'
 	inputter.each do |matchers| 
 	   unless matchers[5].empty?
