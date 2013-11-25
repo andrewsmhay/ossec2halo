@@ -57,10 +57,10 @@ root = doc.root
 puts root["name"]
 items = root.xpath("rule")
 
-puts items[2]["id"]
-puts items[2]["level"]
-puts items[2].at_xpath("match")
-puts items[2].at_xpath("description")
+puts items[11]["id"]
+puts items[11]["level"]
+puts items[11].at_xpath("match").inner_text
+puts items[11].at_xpath("description").inner_text
 f.close
 
 #rb_file_master.each do |rb_file|
