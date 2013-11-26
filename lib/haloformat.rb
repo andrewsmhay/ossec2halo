@@ -93,7 +93,7 @@ class Haloformat
 	    	header+
 	    	name+"Apache"+commaend+
 	    	description+
-	    	"Official Apache rules for OSSEC. Copyright (C) 2009 Trend Micro Inc. - All rights reserved. This program is a free software; you can redistribute it and/or modify it under the terms of the GNU General Public License (version 2) as published by the FSF - Free Software Foundation. License details: http://www.ossec.net/en/licensing.html Contributed by: Ahmet Ozturk"+commaend+
+	    	"Official OSSEC rules for OSSEC. Copyright (C) 2009 Trend Micro Inc. - All rights reserved. This program is a free software; you can redistribute it and/or modify it under the terms of the GNU General Public License (version 2) as published by the FSF - Free Software Foundation. License details: http://www.ossec.net/en/licensing.html"+commaend+
 	    	platform+"linux"+commaend+
 	    	template+
 	    	retired+
