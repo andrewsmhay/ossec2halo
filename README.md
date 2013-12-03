@@ -2,7 +2,7 @@
 
 The ossec2halo tool was built to convert the <a href="http://www.ossec.net/" target="new">OSSEC Open Source Host-based Intrusion Detection System (HIDS)</a> rules to the format used by CloudPassage® Halo®.
 
-Note - CloudPassage does not provide the OSSEC rules. You must download OSSEC from its website and copy the rules into the ./data directory.
+<i>Note - CloudPassage does not provide the OSSEC rules. You must download OSSEC from its website and copy the rules into the ./data directory.</i>
 
 ##Requirements
 * require 'nokogiri'
