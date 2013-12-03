@@ -58,11 +58,11 @@ class Haloformat
 	    end
 
 	    def rules
-	    	"\"rules\": [{"
+	    	"\"rules\": ["
 		end
 
 		def searchpattern
-			"\"search pattern\": \""
+			"\"search_pattern\": \""
 		end
 
 		def filepath
