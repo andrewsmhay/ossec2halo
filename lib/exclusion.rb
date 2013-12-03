@@ -5,7 +5,8 @@ class Exclusion
 		end
 
 		def files
-			%w[ policy_rules.xml local_rules.xml ]
+			%w[ policy_rules.xml 
+				local_rules.xml ]
 		end
 	end
 end
