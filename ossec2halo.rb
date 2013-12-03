@@ -3,7 +3,6 @@ $LOAD_PATH << File.expand_path('./lib')
 require 'nokogiri'
 require 'haloformat'
 require 'directories'
-require 'awesome_print'
 require 'exclusion'
 require 'converter'
 
@@ -23,6 +22,7 @@ ARGV.each {|arg| commands << arg}
 rb_file_master = Dir.glob(Directories.ossec_dir+"*.xml")
 
 if ARGV[0] == 'convert'
+  puts "Converting OSSEC .xml files to CloudPassage® Halo® .json format..."
   rb_file_master.each do |rb_file|
     f = File.open(rb_file)
     doc = Nokogiri::XML(f)
@@ -34,12 +34,12 @@ if ARGV[0] == 'convert'
     filename = rb_file.to_s.gsub(Directories.ossec_dir, '')
     zname = "OSSEC "+filename.gsub(/.xml/ , '')
     jname = "OSSEC_"+filename.gsub(/.xml/ , '.json')
-
+    puts "[>>>] Generated "+jname+" in "+Directories.output_dir
     json_file = File.open(Directories.output_dir+jname, "a")
     json_file.write(Haloformat.header+
     Haloformat.name+zname+Haloformat.commaend+
     Haloformat.description+
-    "Official OSSEC rules. Copyright (C) 2009 Trend Micro Inc. - All rights reserved. License details: http://www.ossec.net/en/licensing.html"+
+    "Official OSSEC rules. Copyright (C) 2009-2013 Trend Micro Inc. - All rights reserved. License details: http://www.ossec.net/en/licensing.html"+
     Haloformat.commaend+
     Haloformat.platform+"linux"+Haloformat.commaend+
     Haloformat.template+
