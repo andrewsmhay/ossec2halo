@@ -2,7 +2,7 @@
 
 The ossec2halo tool was built to convert the <a href="http://www.ossec.net/" target="new">OSSEC Open Source Host-based Intrusion Detection System (HIDS)</a> rules to the format used by CloudPassage® Halo®.
 
-Note - CloudPassage does not provide the OSSEC rules
+Note - CloudPassage does not provide the OSSEC rules. You must download OSSEC from its website and copy the rules into the ./data directory.
 
 ##Requirements
 * require 'nokogiri'
@@ -11,7 +11,7 @@ You must also install Ruby 1.8+ and it is recommended that you install git for e
 
 ##Usage
 
-### Listing available OSSEC 
+### Listing Available OSSEC Rules
 <pre>
 ./ossec2halo.rb list
 
@@ -29,7 +29,7 @@ e.g.
 [>>>] zeus_rules.xml
 </pre>
 
-###Generating Files
+###Generating CloudPassage® Halo® Policy Files
 <pre>
 ./ossec2halo.rb convert
 
