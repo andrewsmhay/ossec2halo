@@ -22,7 +22,7 @@ ARGV.each {|arg| commands << arg}
 rb_file_master = Dir.glob(Directories.ossec_dir+"*.xml")
 
 if ARGV[0] == 'convert'
-  puts "Converting OSSEC .xml files to CloudPassage® Halo® .json format..."
+  puts "Converting OSSEC .xml files to CloudPassage(r) Halo(r) .json format..."
   rb_file_master.each do |rb_file|
     f = File.open(rb_file)
     doc = Nokogiri::XML(f)
