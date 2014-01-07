@@ -39,7 +39,7 @@ if ARGV[0] == 'convert'
     json_file.write(Haloformat.header+
     Haloformat.name+zname+Haloformat.commaend+
     Haloformat.description+
-    "Official OSSEC rules. Copyright (C) 2009-2013 Trend Micro Inc. - All rights reserved. License details: http://www.ossec.net/en/licensing.html"+
+    "Official OSSEC rules. Copyright (C) 2009-2014 Trend Micro Inc. - All rights reserved. License details: http://www.ossec.net/en/licensing.html"+
     Haloformat.commaend+
     Haloformat.platform+"linux"+Haloformat.commaend+
     Haloformat.template+
@@ -74,7 +74,7 @@ if ARGV[0] == 'convert'
                     rule_id,
                     level_id,
                     check_match.to_s.gsub( /\\S/, '\\\\\S').gsub(/ /, '\\\\\s'),
-                    check_desc,
+                    check_desc.to_s.gsub( /\"/, ''),
                     check_info]
       end
       i += 1
