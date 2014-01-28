@@ -6,12 +6,6 @@ require 'directories'
 require 'exclusion'
 require 'converter'
 
-=begin
-a = Ruleconvert.new
-b = Checkcrit.new
-c = Checkconvert.new
-=end
-
 inputter = []
 commands = []
 
