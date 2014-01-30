@@ -22,7 +22,7 @@ if ARGV[0] == 'convert'
     doc = Nokogiri::XML(f)
     root = doc.root
     rule_name = root["name"]
-    items = root.xpath("rule")
+    items = doc.css("rule")
     #items[11].xpath("match").each{|e| ap e.inner_text}
     
     filename = rb_file.to_s.gsub(Directories.ossec_dir, '')
