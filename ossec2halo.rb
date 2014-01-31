@@ -29,7 +29,7 @@ if ARGV[0] == 'convert'
     zname = "OSSEC "+filename.gsub(/.xml/ , '')
     jname = "OSSEC_"+filename.gsub(/.xml/ , '.json')
     puts "[>>>] Generated "+jname+" in "+Directories.output_dir
-    json_file = File.open(Directories.output_dir+jname, "a")
+    json_file = File.open(Directories.output_dir+jname, "w")
     json_file.write(Haloformat.header+
     Haloformat.name+zname+Haloformat.commaend+
     Haloformat.description+
