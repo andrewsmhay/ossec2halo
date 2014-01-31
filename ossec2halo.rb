@@ -6,12 +6,6 @@ require 'directories'
 require 'exclusion'
 require 'converter'
 
-=begin
-a = Ruleconvert.new
-b = Checkcrit.new
-c = Checkconvert.new
-=end
-
 inputter = []
 commands = []
 
@@ -28,14 +22,14 @@ if ARGV[0] == 'convert'
     doc = Nokogiri::XML(f)
     root = doc.root
     rule_name = root["name"]
-    items = root.xpath("rule")
+    items = doc.css("rule")
     #items[11].xpath("match").each{|e| ap e.inner_text}
     
     filename = rb_file.to_s.gsub(Directories.ossec_dir, '')
     zname = "OSSEC "+filename.gsub(/.xml/ , '')
     jname = "OSSEC_"+filename.gsub(/.xml/ , '.json')
     puts "[>>>] Generated "+jname+" in "+Directories.output_dir
-    json_file = File.open(Directories.output_dir+jname, "a")
+    json_file = File.open(Directories.output_dir+jname, "w")
     json_file.write(Haloformat.header+
     Haloformat.name+zname+Haloformat.commaend+
     Haloformat.description+
@@ -74,7 +68,7 @@ if ARGV[0] == 'convert'
                     rule_id,
                     level_id,
                     check_match.to_s.gsub( /\\S/, '\\\\\S').gsub(/ /, '\\\\\s'),
-                    check_desc.to_s.gsub( /\"/, ''),
+                    check_desc.to_s.gsub( /\"/, '\\\"'),
                     check_info]
       end
       i += 1
