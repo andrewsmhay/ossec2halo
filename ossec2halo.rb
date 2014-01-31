@@ -68,7 +68,7 @@ if ARGV[0] == 'convert'
                     rule_id,
                     level_id,
                     check_match.to_s.gsub( /\\S/, '\\\\\S').gsub(/ /, '\\\\\s'),
-                    check_desc.to_s.gsub( /\"/, ''),
+                    check_desc.to_s.gsub( /\"/, '\\\"'),
                     check_info]
       end
       i += 1
