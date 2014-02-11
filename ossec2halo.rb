@@ -24,6 +24,21 @@ if ARGV[0] == 'convert'
     # Use DocumentFragments for multiple root nodes
     doc = Nokogiri::XML::DocumentFragment.parse(xmlStr)
     items = doc.search("./group/rule")
+    varData = doc.search("var")
+    vars = {}
+
+    varData.each do |v|
+      vars[v.attr("name")] = v.text
+    end
+
+    # Parse variables
+    doc.traverse do |node|
+      if node.text?
+        vars.each do |k, v|
+          node.content = node.content.gsub(/\$#{k}/, v)
+        end
+      end
+    end
     
     filename = rb_file.to_s.gsub(Directories.ossec_dir, '')
     zname = "OSSEC "+filename.gsub(/.xml/ , '')
