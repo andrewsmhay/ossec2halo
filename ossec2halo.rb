@@ -19,11 +19,26 @@ if ARGV[0] == 'convert'
   puts "Converting OSSEC .xml files to CloudPassage(r) Halo(r) .json format..."
   rb_file_master.each do |rb_file|
     f = File.open(rb_file)
-    doc = Nokogiri::XML(f)
-    root = doc.root
-    rule_name = root["name"]
-    items = doc.css("rule")
-    #items[11].xpath("match").each{|e| ap e.inner_text}
+    xmlStr = f.read
+
+    # Use DocumentFragments for multiple root nodes
+    doc = Nokogiri::XML::DocumentFragment.parse(xmlStr)
+    items = doc.search("./group/rule")
+    varData = doc.search("var")
+    vars = {}
+
+    varData.each do |v|
+      vars[v.attr("name")] = v.text
+    end
+
+    # Parse variables
+    doc.traverse do |node|
+      if node.text?
+        vars.each do |k, v|
+          node.content = node.content.gsub(/\$#{k}/, v)
+        end
+      end
+    end
     
     filename = rb_file.to_s.gsub(Directories.ossec_dir, '')
     zname = "OSSEC "+filename.gsub(/.xml/ , '')
@@ -64,10 +79,11 @@ if ARGV[0] == 'convert'
         end
 
         inputter << [rb_file.to_s.gsub(Directories.ossec_dir, ''),
-                    rule_name.to_s.gsub(/\,$/, ''),
+                    # rule_name.to_s.gsub(/\,$/, ''), # rule name not used anywhere. No use in parsing it
+                    "",
                     rule_id,
                     level_id,
-                    check_match.to_s.gsub( /\\S/, '\\\\\S').gsub(/ /, '\\\\\s'),
+                    check_match.to_s.gsub( /\\/, '\\\\\\'),
                     check_desc.to_s.gsub( /\"/, '\\\"'),
                     check_info]
       end
